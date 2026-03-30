@@ -1,0 +1,1139 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ASSASSIN</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background-color: white;
+            font-family: Arial, sans-serif;
+        }
+        
+        .header {
+            text-align: center;
+            padding: 20px;
+            font-size: 36px;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            margin: 10px 0;
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 5px;
+        }
+        
+        .nav button {
+            flex: 1;
+            margin: 0;
+            padding: 10px 20px;
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        
+        .nav button:hover {
+            background-color: #e0e0e0;
+        }
+        
+        .content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .profile-container {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .profile-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .profile-info {
+            flex: 1;
+        }
+        
+        .avatar {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: 2px solid #ccc;
+            margin: 0 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #f0f0f0;
+            cursor: pointer;
+        }
+        
+        .avatar input {
+            display: none;
+        }
+        
+        .name {
+            flex: 1;
+            text-align: right;
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+            cursor: pointer;
+        }
+        
+        .status-bar {
+            margin: 20px 0;
+        }
+        
+        .status-item {
+            margin: 10px 0;
+        }
+        
+        .status-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+        }
+        
+        .status-progress {
+            width: 100%;
+            height: 20px;
+            background-color: #f0f0f0;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .status-progress-fill {
+            height: 100%;
+            background-color: #87CEFA;
+            border-radius: 10px;
+        }
+        
+        .info-section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        
+        .info-section h3 {
+            margin-bottom: 10px;
+            color: #333;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+        }
+        
+        .modal-content {
+            background-color: white;
+            margin: 10% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 800px;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+            border-radius: 5px;
+        }
+        
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            position: absolute;
+            right: 20px;
+            top: 10px;
+        }
+        
+        .close:hover {
+            color: black;
+        }
+        
+        .form-group {
+            margin: 15px 0;
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 20px;
+            margin: 10px 0;
+        }
+        
+        .form-col {
+            flex: 1;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        
+        input[type="text"], input[type="number"], select, textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+        
+        .职业选择 {
+            margin: 10px 0;
+        }
+        
+        .职业选项 {
+            margin: 5px 0;
+        }
+        
+        .btn-group {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        .btn-save {
+            background-color: #4CAF50;
+            color: white;
+        }
+        
+        .btn-cancel {
+            background-color: #f44336;
+            color: white;
+        }
+        
+        .character-box {
+            display: flex;
+            align-items: center;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+            margin: 10px 0;
+            cursor: pointer;
+        }
+        
+        .character-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: 1px solid #ccc;
+            margin-right: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #f0f0f0;
+        }
+        
+        .character-name {
+            font-size: 18px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">ASSASSIN</div>
+    
+    <div class="nav">
+        <button id="档案Btn">档案</button>
+        <button id="世界观Btn">国度</button>
+        <button id="人物Btn">人物</button>
+    </div>
+    
+    <div class="content">
+        <div id="档案Page" class="profile-container">
+            <div class="profile-header">
+                <div class="profile-info">
+                    <h2>人物档案</h2>
+                </div>
+                <div class="avatar">
+                    <input type="file" id="avatarInput" accept="image/*">
+                    <span>点击上传头像</span>
+                </div>
+                <div class="name" id="characterName">珀尔·科卢布</div>
+            </div>
+            
+            <div class="status-bar">
+                <div class="status-item">
+                    <div class="status-label">
+                        <span>生命值</span>
+                        <span id="hpValue">100/100</span>
+                    </div>
+                    <div class="status-progress">
+                        <div class="status-progress-fill" id="hpBar" style="width: 100%"></div>
+                    </div>
+                </div>
+                <div class="status-item">
+                    <div class="status-label">
+                        <span>法力值</span>
+                        <span id="mpValue">80/80</span>
+                    </div>
+                    <div class="status-progress">
+                        <div class="status-progress-fill" id="mpBar" style="width: 100%"></div>
+                    </div>
+                </div>
+                <div class="status-item">
+                    <div class="status-label">
+                        <span>武力值</span>
+                        <span id="strengthValue">60/60</span>
+                    </div>
+                    <div class="status-progress">
+                        <div class="status-progress-fill" id="strengthBar" style="width: 100%"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="info-section">
+                <h3>基本信息</h3>
+                <p>性别：女</p>
+                <p>年龄：20</p>
+                <p>生日：10月26日</p>
+                <p>种族：人</p>
+                <p>天赋：雷火元素、同理心</p>
+                <p>性格：冲动、爱冒险</p>
+                <p>特质：向往自由</p>
+            </div>
+            
+            <div class="info-section">
+                <h3>形体容貌</h3>
+                <p>身高：170cm</p>
+                <p>体重：60kg</p>
+                <p>发型发色：红色齐肩</p>
+                <p>瞳色：深绿色</p>
+                <p>肤色：偏白</p>
+                <p>面部特征：左脸颊有痣，有酒窝</p>
+            </div>
+            
+            <div class="info-section">
+                <h3>身份职业</h3>
+                <p>身份：魔法学院学生</p>
+                <p>魔法职业：初级魔法师、初级战士、初级炼金师、初级刺客</p>
+                <p>国籍：艾瑟瑞拉·亚斯塔尔</p>
+                <p>组织：阿萨辛诺</p>
+                <p>武器：袖剑、魔杖</p>
+            </div>
+            
+            <div class="info-section">
+                <h3>资金</h3>
+                <p>500金币 12银币 47铜币</p>
+            </div>
+            
+            <div class="info-section">
+                <h3>家庭</h3>
+                <p>填写框</p>
+            </div>
+            
+            <div class="info-section">
+                <h3>个人经历</h3>
+                <p>填写框</p>
+            </div>
+        </div>
+        
+        <div id="世界观Page" style="display: none;">
+            <div class="info-section">
+                <h3 style="color: #000080; font-size: 24px;">艾瑟瑞拉 Etheria</h3>
+                <div style="border: 1px solid #ccc; border-radius: 5px; padding: 15px; margin-bottom: 20px;">
+                    <p><strong>亚斯塔尔 Astar</strong><br>大陆最富饶的国家，首都玛瑙市，有多个港口，是和岩域的矮人族贸易的必经之地。<br>国家环境适宜，以贸易、种植、打渔为主，多丘陵，茶叶产地。</p>
+                    <p><strong>海狄伦 Heiorur</strong><br>爱好和平的国家，首都阿斯托利亚，自然风景优美，国境内灵兽众多，是狮鹫的培养地。</p>
+                    <p><strong>波特曼 Portman</strong><br>最强大的国家，首都瓦莱里亚。纬度、海拔高，国境内常年冰雪覆盖，不适宜种植，以游牧为主，崇尚武力，经常发动战争。</p>
+                    <p><strong>阿尔西亚 Aelsia</strong><br>领土最大的国家，国都辛塔拉，国境内林木资源丰富。<br>混战时得到神使帮助，神使将太阳神教的根据地设于此。<br>世界上最大的魔法学院： 亚利那Arina学院坐落在此国都。</p>
+                    <p><strong>海文尼亚 Hyvernia</strong><br>由岛屿联盟组成，依附于阿尔西亚，阿索岛传闻是第一代神使的陨落之地。</p>
+                    <p><strong>奥克塔维亚 Octavia</strong><br>崇尚艺术的国家，天下艺术家向往的国度，国都奥林德。</p>
+                    <p><strong>拉泽 Raze</strong><br>狼人的国度，被流放之地，与世隔绝，只偷偷和波塞尼亚的人鱼交易然后到人类城镇上去卖。</p>
+                </div>
+                
+                <h3 style="color: #000080; font-size: 24px;">奥瑟利亚 Othilia</h3>
+                <div style="border: 1px solid #ccc; border-radius: 5px; padding: 15px; margin-bottom: 20px;">
+                    <p>精灵世代守护的大陆，生命树和女神都在此。最大的聚集地也是生命树所在的城镇叫瓦特兰西亚。</p>
+                </div>
+                
+                <h3 style="color: #000080; font-size: 24px;">岩域 Rockrealm</h3>
+                <div style="border: 1px solid #ccc; border-radius: 5px; padding: 15px; margin-bottom: 20px;">
+                    <p>矮人的流放之地，贵族生活在赛罗米尔，被惩罚、流放的矮人在阿斯莱德。</p>
+                </div>
+                
+                <h3 style="color: #000080; font-size: 24px;">科莫多群岛 Komodo</h3>
+                <div style="border: 1px solid #ccc; border-radius: 5px; padding: 15px; margin-bottom: 20px;">
+                    <p>龙族被流放之地，由许多个浮空岛组成，最大的岛屿是龙族的领导者所在地。</p>
+                </div>
+                
+                <h3 style="color: #000080; font-size: 24px;">安普瑞克 Vampiric</h3>
+                <div style="border: 1px solid #ccc; border-radius: 5px; padding: 15px; margin-bottom: 20px;">
+                    <p>吸血鬼的流放之地，吸血鬼由十三个古老的氏族统领，长老会所在地叫鲁恩</p>
+                </div>
+                
+                <h3 style="color: #000080; font-size: 24px;">波塞尼亚 Poseinia</h3>
+                <div style="border: 1px solid #ccc; border-radius: 5px; padding: 15px; margin-bottom: 20px;">
+                    <p>人鱼流放之地，国都叫波塞尼。</p>
+                </div>
+            </div>
+        </div>
+        
+        <div id="人物Page" style="display: none;">
+            <h2>人物</h2>
+            <div class="character-box" id="characterBox">
+                <div class="character-avatar" id="characterAvatar">
+                    <span>👤</span>
+                </div>
+                <div class="character-name" id="characterBoxName">珀尔·科卢布</div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 底部灰色长条 -->
+    <div style="height: 20px; background-color: #f0f0f0; width: 100%; margin-top: 20px;"></div>
+    
+    <!-- 编辑弹窗 -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>编辑人物信息</h2>
+            
+            <div class="form-group">
+                <h3>基本信息</h3>
+                <div class="form-row">
+                    <div class="form-col">
+                        <label>名字</label>
+                        <input type="text" id="firstName" value="珀尔">
+                    </div>
+                    <div class="form-col">
+                        <label>姓氏</label>
+                        <input type="text" id="lastName" value="科卢布">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-col">
+                        <label>性别</label>
+                        <select id="gender">
+                            <option value="女" selected>女</option>
+                            <option value="男">男</option>
+                            <option value="其他">其他</option>
+                        </select>
+                    </div>
+                    <div class="form-col">
+                        <label>年龄</label>
+                        <input type="number" id="age" value="20">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-col">
+                        <label>生日</label>
+                        <input type="text" id="birthday" value="10月26日">
+                    </div>
+                    <div class="form-col">
+                        <label>种族</label>
+                        <select id="race">
+                            <option value="人" selected>人</option>
+                            <option value="人鱼">人鱼</option>
+                            <option value="精灵">精灵</option>
+                            <option value="狼人">狼人</option>
+                            <option value="吸血鬼">吸血鬼</option>
+                            <option value="矮人">矮人</option>
+                            <option value="龙">龙</option>
+                            <option value="龙裔（混血）">龙裔（混血）</option>
+                            <option value="半精灵">半精灵</option>
+                            <option value="半矮人">半矮人</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>天赋</label>
+                    <input type="text" id="talent" value="雷火元素、同理心">
+                </div>
+                <div class="form-group">
+                    <label>性格</label>
+                    <input type="text" id="personality" value="冲动、爱冒险">
+                </div>
+                <div class="form-group">
+                    <label>特质</label>
+                    <input type="text" id="trait" value="向往自由">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <h3>形体容貌</h3>
+                <div class="form-row">
+                    <div class="form-col">
+                        <label>身高</label>
+                        <input type="text" id="height" value="170cm">
+                    </div>
+                    <div class="form-col">
+                        <label>体重</label>
+                        <input type="text" id="weight" value="60kg">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-col">
+                        <label>发型发色</label>
+                        <input type="text" id="hair" value="红色齐肩">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-col">
+                        <label>瞳色</label>
+                        <input type="text" id="eyeColor" value="深绿色">
+                    </div>
+                    <div class="form-col">
+                        <label>肤色</label>
+                        <input type="text" id="skinColor" value="偏白">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>面部特征</label>
+                    <input type="text" id="facialFeatures" value="左脸颊有痣，有酒窝">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <h3>身份职业</h3>
+                <div class="form-group">
+                    <label>身份</label>
+                    <input type="text" id="identity" value="魔法学院学生">
+                </div>
+                <div class="form-group">
+                    <label>魔法职业</label>
+                    <div class="职业选择" id="职业选择">
+                        <div class="职业选项">
+                            <select class="职业级别">
+                                <option value="学徒">学徒</option>
+                                <option value="初级" selected>初级</option>
+                                <option value="中级">中级</option>
+                                <option value="高级">高级</option>
+                                <option value="王级">王级</option>
+                                <option value="圣级">圣级</option>
+                                <option value="神级">神级</option>
+                            </select>
+                            <select class="职业名称">
+                                <option value="魔法师" selected>魔法师</option>
+                                <option value="战士">战士</option>
+                                <option value="刺客">刺客</option>
+                                <option value="盗贼">盗贼</option>
+                                <option value="弓箭手">弓箭手</option>
+                                <option value="伪装师">伪装师</option>
+                                <option value="炼金术师">炼金术师</option>
+                                <option value="缝纫师">缝纫师</option>
+                                <option value="铸造师">铸造师</option>
+                                <option value="附魔师">附魔师</option>
+                                <option value="卷轴师">卷轴师</option>
+                                <option value="吟游诗人">吟游诗人</option>
+                                <option value="牧师">牧师</option>
+                                <option value="圣骑士">圣骑士</option>
+                            </select>
+                            <button class="btn btn-cancel delete职业" style="padding: 5px 10px; font-size: 12px;">×</button>
+                        </div>
+                        <div class="职业选项">
+                            <select class="职业级别">
+                                <option value="学徒">学徒</option>
+                                <option value="初级" selected>初级</option>
+                                <option value="中级">中级</option>
+                                <option value="高级">高级</option>
+                                <option value="王级">王级</option>
+                                <option value="圣级">圣级</option>
+                                <option value="神级">神级</option>
+                            </select>
+                            <select class="职业名称">
+                                <option value="魔法师">魔法师</option>
+                                <option value="战士" selected>战士</option>
+                                <option value="刺客">刺客</option>
+                                <option value="盗贼">盗贼</option>
+                                <option value="弓箭手">弓箭手</option>
+                                <option value="伪装师">伪装师</option>
+                                <option value="炼金术师">炼金术师</option>
+                                <option value="缝纫师">缝纫师</option>
+                                <option value="铸造师">铸造师</option>
+                                <option value="附魔师">附魔师</option>
+                                <option value="卷轴师">卷轴师</option>
+                                <option value="吟游诗人">吟游诗人</option>
+                                <option value="牧师">牧师</option>
+                                <option value="圣骑士">圣骑士</option>
+                            </select>
+                            <button class="btn btn-cancel delete职业" style="padding: 5px 10px; font-size: 12px;">×</button>
+                        </div>
+                        <div class="职业选项">
+                            <select class="职业级别">
+                                <option value="学徒">学徒</option>
+                                <option value="初级" selected>初级</option>
+                                <option value="中级">中级</option>
+                                <option value="高级">高级</option>
+                                <option value="王级">王级</option>
+                                <option value="圣级">圣级</option>
+                                <option value="神级">神级</option>
+                            </select>
+                            <select class="职业名称">
+                                <option value="魔法师">魔法师</option>
+                                <option value="战士">战士</option>
+                                <option value="刺客">刺客</option>
+                                <option value="盗贼">盗贼</option>
+                                <option value="弓箭手">弓箭手</option>
+                                <option value="伪装师">伪装师</option>
+                                <option value="炼金术师" selected>炼金术师</option>
+                                <option value="缝纫师">缝纫师</option>
+                                <option value="铸造师">铸造师</option>
+                                <option value="附魔师">附魔师</option>
+                                <option value="卷轴师">卷轴师</option>
+                                <option value="吟游诗人">吟游诗人</option>
+                                <option value="牧师">牧师</option>
+                                <option value="圣骑士">圣骑士</option>
+                            </select>
+                            <button class="btn btn-cancel delete职业" style="padding: 5px 10px; font-size: 12px;">×</button>
+                        </div>
+                        <div class="职业选项">
+                            <select class="职业级别">
+                                <option value="学徒">学徒</option>
+                                <option value="初级" selected>初级</option>
+                                <option value="中级">中级</option>
+                                <option value="高级">高级</option>
+                                <option value="王级">王级</option>
+                                <option value="圣级">圣级</option>
+                                <option value="神级">神级</option>
+                            </select>
+                            <select class="职业名称">
+                                <option value="魔法师">魔法师</option>
+                                <option value="战士">战士</option>
+                                <option value="刺客" selected>刺客</option>
+                                <option value="盗贼">盗贼</option>
+                                <option value="弓箭手">弓箭手</option>
+                                <option value="伪装师">伪装师</option>
+                                <option value="炼金术师">炼金术师</option>
+                                <option value="缝纫师">缝纫师</option>
+                                <option value="铸造师">铸造师</option>
+                                <option value="附魔师">附魔师</option>
+                                <option value="卷轴师">卷轴师</option>
+                                <option value="吟游诗人">吟游诗人</option>
+                                <option value="牧师">牧师</option>
+                                <option value="圣骑士">圣骑士</option>
+                            </select>
+                            <button class="btn btn-cancel delete职业" style="padding: 5px 10px; font-size: 12px;">×</button>
+                        </div>
+                        <button id="add职业Btn" class="btn btn-save" style="margin-top: 10px; padding: 5px 10px; font-size: 12px;">+ 添加职业</button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>国籍</label>
+                    <div class="form-row">
+                        <div class="form-col">
+                            <label>大陆</label>
+                            <select id="continent" onchange="updateRegions()">
+                                <option value="艾瑟瑞拉" selected>艾瑟瑞拉</option>
+                                <option value="奥瑟利亚">奥瑟利亚</option>
+                                <option value="岩域">岩域</option>
+                                <option value="科莫多群岛">科莫多群岛</option>
+                                <option value="安普瑞克">安普瑞克</option>
+                                <option value="波塞尼亚">波塞尼亚</option>
+                            </select>
+                        </div>
+                        <div class="form-col">
+                            <label>地区</label>
+                            <select id="region">
+                                <option value="亚斯塔尔">亚斯塔尔</option>
+                                <option value="海狄伦">海狄伦</option>
+                                <option value="波特曼">波特曼</option>
+                                <option value="阿尔西亚">阿尔西亚</option>
+                                <option value="海文尼亚">海文尼亚</option>
+                                <option value="奥克塔维亚">奥克塔维亚</option>
+                                <option value="拉泽">拉泽</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>组织</label>
+                    <input type="text" id="organization" value="阿萨辛诺">
+                </div>
+                <div class="form-group">
+                    <label>武器</label>
+                    <input type="text" id="weapon" value="袖剑、魔杖">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <h3>资金</h3>
+                <div class="form-row">
+                    <div class="form-col">
+                        <label>金币</label>
+                        <input type="number" id="gold" value="500">
+                    </div>
+                    <div class="form-col">
+                        <label>银币</label>
+                        <input type="number" id="silver" value="12">
+                    </div>
+                    <div class="form-col">
+                        <label>铜币</label>
+                        <input type="number" id="copper" value="47">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <h3>状态栏</h3>
+                <div class="form-row">
+                    <div class="form-col">
+                        <label>生命值</label>
+                        <input type="number" id="hp" value="100">
+                    </div>
+                    <div class="form-col">
+                        <label>法力值</label>
+                        <input type="number" id="mp" value="80">
+                    </div>
+                    <div class="form-col">
+                        <label>武力值</label>
+                        <input type="number" id="strength" value="60">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <h3>家庭</h3>
+                <textarea id="family"></textarea>
+            </div>
+            
+            <div class="form-group">
+                <h3>个人经历</h3>
+                <textarea id="experience"></textarea>
+            </div>
+            
+            <div class="btn-group">
+                <button class="btn btn-cancel" id="cancelBtn">取消</button>
+                <button class="btn btn-save" id="saveBtn">保存</button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // 页面切换
+        document.getElementById('档案Btn').addEventListener('click', function() {
+            document.getElementById('档案Page').style.display = 'block';
+            document.getElementById('世界观Page').style.display = 'none';
+            document.getElementById('人物Page').style.display = 'none';
+        });
+        
+        document.getElementById('世界观Btn').addEventListener('click', function() {
+            document.getElementById('档案Page').style.display = 'none';
+            document.getElementById('世界观Page').style.display = 'block';
+            document.getElementById('人物Page').style.display = 'none';
+        });
+        
+        document.getElementById('人物Btn').addEventListener('click', function() {
+            document.getElementById('档案Page').style.display = 'none';
+            document.getElementById('世界观Page').style.display = 'none';
+            document.getElementById('人物Page').style.display = 'block';
+        });
+        
+        // 头像上传
+        const avatar = document.querySelector('.avatar');
+        const avatarInput = document.getElementById('avatarInput');
+        
+        avatar.addEventListener('click', function() {
+            avatarInput.click();
+        });
+        
+        avatarInput.addEventListener('change', function(e) {
+            if (e.target.files && e.target.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    avatar.style.backgroundImage = `url(${e.target.result})`;
+                    avatar.style.backgroundSize = 'cover';
+                    avatar.innerHTML = '';
+                };
+                reader.readAsDataURL(e.target.files[0]);
+            }
+        });
+        
+        // 编辑弹窗
+        const modal = document.getElementById('editModal');
+        const characterName = document.getElementById('characterName');
+        const closeBtn = document.querySelector('.close');
+        const saveBtn = document.getElementById('saveBtn');
+        const cancelBtn = document.getElementById('cancelBtn');
+        
+        characterName.addEventListener('click', function() {
+            modal.style.display = 'block';
+        });
+        
+        closeBtn.addEventListener('click', function() {
+            modal.style.display = 'none';
+        });
+        
+        cancelBtn.addEventListener('click', function() {
+            modal.style.display = 'none';
+        });
+        
+        window.addEventListener('click', function(e) {
+            if (e.target == modal) {
+                modal.style.display = 'none';
+            }
+        });
+        
+        // 魔法职业增删功能
+        const 职业选择 = document.getElementById('职业选择');
+        const add职业Btn = document.getElementById('add职业Btn');
+        
+        // 添加职业
+        add职业Btn.addEventListener('click', function() {
+            const 职业选项 = document.createElement('div');
+            职业选项.className = '职业选项';
+            职业选项.innerHTML = `
+                <select class="职业级别">
+                    <option value="学徒">学徒</option>
+                    <option value="初级" selected>初级</option>
+                    <option value="中级">中级</option>
+                    <option value="高级">高级</option>
+                    <option value="王级">王级</option>
+                    <option value="圣级">圣级</option>
+                    <option value="神级">神级</option>
+                </select>
+                <select class="职业名称">
+                    <option value="魔法师" selected>魔法师</option>
+                    <option value="战士">战士</option>
+                    <option value="刺客">刺客</option>
+                    <option value="盗贼">盗贼</option>
+                    <option value="弓箭手">弓箭手</option>
+                    <option value="伪装师">伪装师</option>
+                    <option value="炼金术师">炼金术师</option>
+                    <option value="缝纫师">缝纫师</option>
+                    <option value="铸造师">铸造师</option>
+                    <option value="附魔师">附魔师</option>
+                    <option value="卷轴师">卷轴师</option>
+                    <option value="吟游诗人">吟游诗人</option>
+                    <option value="牧师">牧师</option>
+                    <option value="圣骑士">圣骑士</option>
+                </select>
+                <button class="btn btn-cancel delete职业" style="padding: 5px 10px; font-size: 12px;">×</button>
+            `;
+            职业选择.insertBefore(职业选项, add职业Btn);
+            
+            // 为新添加的删除按钮添加事件监听
+            职业选项.querySelector('.delete职业').addEventListener('click', function() {
+                职业选项.remove();
+            });
+        });
+        
+        // 为现有删除按钮添加事件监听
+        document.querySelectorAll('.delete职业').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                this.parentElement.remove();
+            });
+        });
+        
+        // 大陆和地区的级联选择
+        function updateRegions() {
+            const continent = document.getElementById('continent').value;
+            const region = document.getElementById('region');
+            
+            // 清空现有选项
+            region.innerHTML = '';
+            
+            // 根据选择的大陆添加对应的地区
+            switch(continent) {
+                case '艾瑟瑞拉':
+                    addRegionOption('亚斯塔尔');
+                    addRegionOption('海狄伦');
+                    addRegionOption('波特曼');
+                    addRegionOption('阿尔西亚');
+                    addRegionOption('海文尼亚');
+                    addRegionOption('奥克塔维亚');
+                    addRegionOption('拉泽');
+                    break;
+                case '岩域':
+                    addRegionOption('赛罗米尔');
+                    addRegionOption('阿斯莱德');
+                    break;
+                default:
+                    // 其他大陆没有子地区
+                    addRegionOption('');
+                    break;
+            }
+        }
+        
+        function addRegionOption(value) {
+            const region = document.getElementById('region');
+            const option = document.createElement('option');
+            option.value = value;
+            option.textContent = value;
+            region.appendChild(option);
+        }
+        
+        // 保存修改
+        saveBtn.addEventListener('click', function() {
+            // 收集所有表单数据
+            const characterData = {
+                id: Date.now(),
+                name: `${document.getElementById('firstName').value}·${document.getElementById('lastName').value}`,
+                gender: document.getElementById('gender').value,
+                age: document.getElementById('age').value,
+                birthday: document.getElementById('birthday').value,
+                race: document.getElementById('race').value,
+                talent: document.getElementById('talent').value,
+                personality: document.getElementById('personality').value,
+                trait: document.getElementById('trait').value,
+                height: document.getElementById('height').value,
+                weight: document.getElementById('weight').value,
+                hair: document.getElementById('hair').value,
+                eyeColor: document.getElementById('eyeColor').value,
+                skinColor: document.getElementById('skinColor').value,
+                facialFeatures: document.getElementById('facialFeatures').value,
+                identity: document.getElementById('identity').value,
+                organization: document.getElementById('organization').value,
+                weapon: document.getElementById('weapon').value,
+                gold: document.getElementById('gold').value,
+                silver: document.getElementById('silver').value,
+                copper: document.getElementById('copper').value,
+                hp: document.getElementById('hp').value,
+                mp: document.getElementById('mp').value,
+                strength: document.getElementById('strength').value,
+                family: document.getElementById('family').value,
+                experience: document.getElementById('experience').value,
+                continent: document.getElementById('continent').value,
+                region: document.getElementById('region').value,
+                avatar: avatar.style.backgroundImage ? avatar.style.backgroundImage : ''
+            };
+            
+            // 收集职业数据
+            const professions = [];
+            document.querySelectorAll('.职业选项').forEach(function(option) {
+                const level = option.querySelector('.职业级别').value;
+                const name = option.querySelector('.职业名称').value;
+                professions.push(`${level}${name}`);
+            });
+            characterData.professions = professions;
+            
+            // 保存到localStorage
+            const characters = JSON.parse(localStorage.getItem('characters') || '[]');
+            characters.push(characterData);
+            localStorage.setItem('characters', JSON.stringify(characters));
+            
+            // 更新当前角色信息
+            const firstName = document.getElementById('firstName').value;
+            const lastName = document.getElementById('lastName').value;
+            characterName.textContent = `${firstName}·${lastName}`;
+            
+            // 更新国籍
+            const continent = document.getElementById('continent').value;
+            const region = document.getElementById('region').value;
+            const nationality = `${continent}${region ? '·' + region : ''}`;
+            document.querySelector('.info-section:nth-child(5) p:nth-child(2)').textContent = `国籍：${nationality}`;
+            
+            // 更新状态栏
+            const hp = document.getElementById('hp').value;
+            const mp = document.getElementById('mp').value;
+            const strength = document.getElementById('strength').value;
+            
+            document.getElementById('hpValue').textContent = `${hp}/${hp}`;
+            document.getElementById('hpBar').style.width = '100%';
+            
+            document.getElementById('mpValue').textContent = `${mp}/${mp}`;
+            document.getElementById('mpBar').style.width = '100%';
+            
+            document.getElementById('strengthValue').textContent = `${strength}/${strength}`;
+            document.getElementById('strengthBar').style.width = '100%';
+            
+            // 更新任务页面的角色信息
+            document.getElementById('characterBoxName').textContent = `${firstName}·${lastName}`;
+            
+            // 推进剧情的逻辑可以在这里添加
+            
+            // 关闭弹窗
+            modal.style.display = 'none';
+            
+            // 延迟刷新人物页面，确保弹窗已关闭
+            setTimeout(function() {
+                loadCharacters();
+            }, 100);
+        });
+        
+        // 任务页面角色点击事件
+        document.getElementById('characterBox').addEventListener('click', function() {
+            modal.style.display = 'block';
+        });
+        
+        // 加载所有人物
+        function loadCharacters() {
+            const characters = JSON.parse(localStorage.getItem('characters') || '[]');
+            const characterPage = document.getElementById('人物Page');
+            
+            // 清空现有内容
+            characterPage.innerHTML = '<h2>人物</h2>';
+            
+            // 添加所有人物
+            characters.forEach(function(character) {
+                const characterBox = document.createElement('div');
+                characterBox.className = 'character-box';
+                characterBox.innerHTML = `
+                    <div class="character-avatar" style="${character.avatar ? `background-image: ${character.avatar}; background-size: cover;` : ''}">
+                        ${character.avatar ? '' : '<span>👤</span>'}
+                    </div>
+                    <div class="character-name">${character.name}</div>
+                `;
+                
+                // 添加点击事件
+                characterBox.addEventListener('click', function() {
+                    // 显示编辑弹窗
+                    modal.style.display = 'block';
+                    
+                    // 填充人物数据到表单
+                    const nameParts = character.name.split('·');
+                    document.getElementById('firstName').value = nameParts[0];
+                    document.getElementById('lastName').value = nameParts[1] || '';
+                    document.getElementById('gender').value = character.gender;
+                    document.getElementById('age').value = character.age;
+                    document.getElementById('birthday').value = character.birthday;
+                    document.getElementById('race').value = character.race;
+                    document.getElementById('talent').value = character.talent;
+                    document.getElementById('personality').value = character.personality;
+                    document.getElementById('trait').value = character.trait;
+                    document.getElementById('height').value = character.height;
+                    document.getElementById('weight').value = character.weight;
+                    document.getElementById('hair').value = character.hair;
+                    document.getElementById('eyeColor').value = character.eyeColor;
+                    document.getElementById('skinColor').value = character.skinColor;
+                    document.getElementById('facialFeatures').value = character.facialFeatures;
+                    document.getElementById('identity').value = character.identity;
+                    document.getElementById('organization').value = character.organization;
+                    document.getElementById('weapon').value = character.weapon;
+                    document.getElementById('gold').value = character.gold;
+                    document.getElementById('silver').value = character.silver;
+                    document.getElementById('copper').value = character.copper;
+                    document.getElementById('hp').value = character.hp;
+                    document.getElementById('mp').value = character.mp;
+                    document.getElementById('strength').value = character.strength;
+                    document.getElementById('family').value = character.family;
+                    document.getElementById('experience').value = character.experience;
+                    document.getElementById('continent').value = character.continent;
+                    document.getElementById('region').value = character.region;
+                    
+                    // 更新头像
+                    if (character.avatar) {
+                        avatar.style.backgroundImage = character.avatar;
+                        avatar.style.backgroundSize = 'cover';
+                        avatar.innerHTML = '';
+                    }
+                    
+                    // 清空现有职业
+                    const 职业选择 = document.getElementById('职业选择');
+                    const add职业Btn = document.getElementById('add职业Btn');
+                    while (职业选择.firstChild) {
+                        if (职业选择.firstChild === add职业Btn) break;
+                        职业选择.removeChild(职业选择.firstChild);
+                    }
+                    
+                    // 添加职业
+                    if (character.professions) {
+                        character.professions.forEach(function(profession) {
+                            const level = profession.match(/(学徒|初级|中级|高级|王级|圣级|神级)/)[0];
+                            const name = profession.replace(level, '');
+                            
+                            const 职业选项 = document.createElement('div');
+                            职业选项.className = '职业选项';
+                            职业选项.innerHTML = `
+                                <select class="职业级别">
+                                    <option value="学徒" ${level === '学徒' ? 'selected' : ''}>学徒</option>
+                                    <option value="初级" ${level === '初级' ? 'selected' : ''}>初级</option>
+                                    <option value="中级" ${level === '中级' ? 'selected' : ''}>中级</option>
+                                    <option value="高级" ${level === '高级' ? 'selected' : ''}>高级</option>
+                                    <option value="王级" ${level === '王级' ? 'selected' : ''}>王级</option>
+                                    <option value="圣级" ${level === '圣级' ? 'selected' : ''}>圣级</option>
+                                    <option value="神级" ${level === '神级' ? 'selected' : ''}>神级</option>
+                                </select>
+                                <select class="职业名称">
+                                    <option value="魔法师" ${name === '魔法师' ? 'selected' : ''}>魔法师</option>
+                                    <option value="战士" ${name === '战士' ? 'selected' : ''}>战士</option>
+                                    <option value="刺客" ${name === '刺客' ? 'selected' : ''}>刺客</option>
+                                    <option value="盗贼" ${name === '盗贼' ? 'selected' : ''}>盗贼</option>
+                                    <option value="弓箭手" ${name === '弓箭手' ? 'selected' : ''}>弓箭手</option>
+                                    <option value="伪装师" ${name === '伪装师' ? 'selected' : ''}>伪装师</option>
+                                    <option value="炼金术师" ${name === '炼金术师' ? 'selected' : ''}>炼金术师</option>
+                                    <option value="缝纫师" ${name === '缝纫师' ? 'selected' : ''}>缝纫师</option>
+                                    <option value="铸造师" ${name === '铸造师' ? 'selected' : ''}>铸造师</option>
+                                    <option value="附魔师" ${name === '附魔师' ? 'selected' : ''}>附魔师</option>
+                                    <option value="卷轴师" ${name === '卷轴师' ? 'selected' : ''}>卷轴师</option>
+                                    <option value="吟游诗人" ${name === '吟游诗人' ? 'selected' : ''}>吟游诗人</option>
+                                    <option value="牧师" ${name === '牧师' ? 'selected' : ''}>牧师</option>
+                                    <option value="圣骑士" ${name === '圣骑士' ? 'selected' : ''}>圣骑士</option>
+                                </select>
+                                <button class="btn btn-cancel delete职业" style="padding: 5px 10px; font-size: 12px;">×</button>
+                            `;
+                            职业选择.insertBefore(职业选项, add职业Btn);
+                            
+                            // 为删除按钮添加事件监听
+                            职业选项.querySelector('.delete职业').addEventListener('click', function() {
+                                职业选项.remove();
+                            });
+                        });
+                    }
+                });
+                
+                characterPage.appendChild(characterBox);
+            });
+        }
+        
+        // 页面加载时加载人物
+        window.addEventListener('load', function() {
+            loadCharacters();
+        });
+        
+        // 人物页面切换时加载人物
+        document.getElementById('人物Btn').addEventListener('click', function() {
+            document.getElementById('档案Page').style.display = 'none';
+            document.getElementById('世界观Page').style.display = 'none';
+            document.getElementById('人物Page').style.display = 'block';
+            loadCharacters();
+        });
+        
+        // 同步头像到任务页面
+        avatarInput.addEventListener('change', function(e) {
+            if (e.target.files && e.target.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    avatar.style.backgroundImage = `url(${e.target.result})`;
+                    avatar.style.backgroundSize = 'cover';
+                    avatar.innerHTML = '';
+                    
+                    // 同步到任务页面
+                    const characterAvatar = document.getElementById('characterAvatar');
+                    characterAvatar.style.backgroundImage = `url(${e.target.result})`;
+                    characterAvatar.style.backgroundSize = 'cover';
+                    characterAvatar.innerHTML = '';
+                };
+                reader.readAsDataURL(e.target.files[0]);
+            }
+        });
+    </script>
+</body>
+</html>
